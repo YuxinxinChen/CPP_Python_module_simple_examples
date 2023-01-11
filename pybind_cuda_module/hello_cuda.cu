@@ -19,6 +19,9 @@ void hello_cuda(torch::Tensor input) {
    const int threads=32;
    const int blocks=1;
 
+   int device_id = input.get_device();
+   printf("device_id %d\n", device_id);
+   cudaSetDevice(device_id);
    AT_DISPATCH_ALL_TYPES(input.type(), "hello_cuda", 
      ([&] {
         hello_cuda_kernel<scalar_t><<<blocks, threads>>>
