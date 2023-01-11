@@ -12,4 +12,4 @@ Nice summary: https://blog.csdn.net/HaoBBNuanMM/article/details/112243129
 
 ### CUDA Examples:
 - https://github.com/pytorch/extension-cpp/blob/master/cuda/lltm_cuda.cpp
-- https://github.com/pytorch/extension-cpp/blob/master/cuda/lltm_cuda.cpp
+- https://github.com/pytorch/extension-cpp/blob/master/cuda/lltm_cuda_kernel.cu
