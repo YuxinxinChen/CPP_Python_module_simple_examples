@@ -50,6 +50,27 @@ ELSE()
 ENDIF(CUDA_FOUND)
 
 IF(MPISUPPORT)
+  if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(powerpc|ppc)64")
+    message("Detected PowerPC 64-bit architecture")
+    if(CMAKE_SYSTEM_PROCESSOR STREQUAL "ppc64le")
+      message("Detected little-endian PowerPC 64-bit architecture (POWER8 or later)")
+      execute_process(
+        COMMAND grep -q "POWER9" /proc/cpuinfo
+        RESULT_VARIABLE IS_POWER9
+      )
+      if(IS_POWER9 EQUAL 0)
+        message("Detected IBM POWER9 architecture, use libmpi_ibm instead")
+        set(IBM_POWER9_FOUND TRUE)
+      endif()
+    endif()
+  endif()
+
+  if(IBM_POWER9_FOUND)
+    set(MPI_LIB_NAME "mpi_ibm")
+  else()
+    set(MPI_LIB_NAME "mpi")
+  endif()
+
   FIND_PATH(MPI_DIR include/mpi.h
   HINTS
     ENV ${MPI_HOME}
@@ -69,7 +90,7 @@ IF(MPISUPPORT)
   LIST(APPEND NVSHMEM_INCLUDE_DIRECTORIES ${MPI_INCLUDE})
 
   SET(MPI_LIBDIR "${MPI_DIR}/lib")
-  FIND_LIBRARY(MPI_LIBRARY mpi
+  FIND_LIBRARY(MPI_LIBRARY ${MPI_LIB_NAME}
   PATHS "${MPI_LIBDIR}"
     NO_DEFAULT_PATH
   )
