@@ -1,0 +1,8 @@
+# .gitignore
+
+# Ignore build directories recursively
+**/build/
+
+# Ignore __pycache__ directories recursively
+**/__pycache__/
+
